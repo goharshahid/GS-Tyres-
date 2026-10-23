@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#101820"><meta name="description" content="GS Tyres Pakistan - find tyre sizes and request a quote.">
+<link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon.svg" type="image/svg+xml">
+<title>GS Tyres | Tyre Finder Pakistan</title>
+<style>
+:root{--ink:#101820;--yellow:#ffc928;--paper:#f5f7fa;--muted:#64748b}*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:var(--paper);color:var(--ink)}header{background:var(--ink);color:white;padding:22px max(18px,calc((100% - 1050px)/2));border-bottom:5px solid var(--yellow)}.brand{font-size:1.7rem;font-weight:900;letter-spacing:.04em}.brand span{color:var(--yellow)}header p{margin:6px 0 0;color:#d7dee8}.wrap{max-width:1050px;margin:auto;padding:20px}.hero{padding:24px 0 12px}.hero h1{font-size:clamp(1.8rem,5vw,3rem);line-height:1.1;margin:0 0 12px}.hero p{color:var(--muted);max-width:650px}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0 12px}.tabs button,.btn{border:0;border-radius:12px;padding:12px 16px;font-weight:750;cursor:pointer}.tabs button{background:#e2e8f0}.tabs button.active,.btn.primary{background:var(--yellow);color:var(--ink)}.panel,.result,.notice{background:white;border:1px solid #e2e8f0;border-radius:18px;padding:18px;box-shadow:0 6px 22px #1018200a}.panel label{display:block;font-weight:700;margin-bottom:8px}.searchrow{display:flex;gap:10px}.searchrow input{min-width:0;flex:1;border:1px solid #cbd5e1;border-radius:12px;padding:14px;font-size:1rem}.hint{font-size:.9rem;color:var(--muted);margin:10px 0 0}.results{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin-top:14px}.result h3{margin:0 0 8px}.tag{display:inline-block;background:#fff2bd;padding:5px 9px;border-radius:999px;font-size:.8rem;font-weight:800}.result p{color:var(--muted);font-size:.94rem}.result button{width:100%;margin-top:8px}.sectiontitle{margin:30px 0 12px}.notice{margin-top:16px;background:#fff8df;border-color:#f3d36d;box-shadow:none}.footer{padding:26px 0;color:var(--muted);font-size:.88rem}.hidden{display:none}@media(max-width:540px){.searchrow{flex-direction:column}.searchrow button{width:100%}}
+</style>
+</head>
+<body>
+<header><div class="brand">GS <span>TYRES</span></div><p>Tyre Finder · Karachi, Pakistan · Customer enquiries</p></header>
+<main class="wrap"><section class="hero"><h1>Find the right tyre for your vehicle.</h1><p>Search by vehicle model or tyre size, then send your requirement to GS Tyres on WhatsApp.</p></section>
+<div class="tabs"><button class="active" id="vehicleTab" onclick="setMode('vehicle')">Search by vehicle</button><button id="sizeTab" onclick="setMode('size')">Search by tyre size</button></div>
+<section class="panel"><label id="searchLabel" for="searchInput">Enter vehicle model (e.g. Suzuki Mehran)</label><div class="searchrow"><input id="searchInput" placeholder="Enter vehicle model" autocomplete="off"><button class="btn primary" onclick="searchTyres()">Search tyres</button></div><p class="hint">Fitment examples are for demonstration only. Confirm the vehicle variant, wheel size and manufacturer guidance before purchase.</p></section>
+<div id="results" class="results" aria-live="polite"></div>
+<h2 class="sectiontitle">Need a quote?</h2><section class="panel"><p>Send your vehicle model, tyre size, quantity and preferred brand to our team.</p><button class="btn primary" onclick="quoteGeneral()">Request a WhatsApp quote</button><p class="hint">Before launch, replace the demo WhatsApp number in this file with your business number.</p></section>
+<section class="notice"><strong>Important:</strong> This starter site does not contain a verified tyre-fitment database, live stock or a secure admin system yet. Do not treat sample records as confirmed fitment advice.</section>
+<footer class="footer">© <span id="year"></span> GS Tyres · Pakistan</footer></main>
+<script>
+// Demo records only. Verify each vehicle variant before publishing as confirmed fitment.
+const records=[
+{vehicle:'Suzuki Mehran (sample)',size:'145/70R12',category:'Car',brand:'Confirm brand',note:'Sample only — verify vehicle variant and tyre placard.'},
+{vehicle:'Daihatsu Cuore (sample)',size:'145/70R12',category:'Car',brand:'Confirm brand',note:'Sample only — verify vehicle variant and tyre placard.'},
+{vehicle:'Toyota Hiace (variant-dependent)',size:'Confirm vehicle placard',category:'Van',brand:'Confirm brand',note:'Tyre size varies by model, year and load rating; verify before quoting.'}
+];let mode='vehicle';
+function setMode(m){mode=m;document.getElementById('vehicleTab').classList.toggle('active',m==='vehicle');document.getElementById('sizeTab').classList.toggle('active',m==='size');document.getElementById('searchLabel').textContent=m==='vehicle'?'Enter vehicle model (e.g. Suzuki Mehran)':'Enter tyre size (e.g. 145/70R12)';document.getElementById('searchInput').placeholder=m==='vehicle'?'Enter vehicle model':'Enter tyre size';document.getElementById('results').innerHTML='';}
+function searchTyres(){const q=document.getElementById('searchInput').value.trim().toLowerCase();const out=document.getElementById('results');if(!q){out.innerHTML='<div class="result">Please enter a vehicle model or tyre size.</div>';return}const matches=records.filter(r=>(mode==='vehicle'?r.vehicle:r.size).toLowerCase().includes(q));out.innerHTML=matches.length?matches.map(r=>`<article class="result"><span class="tag">${r.category}</span><h3>${r.vehicle}</h3><p><strong>Tyre size:</strong> ${r.size}</p><p><strong>Brand:</strong> ${r.brand}</p><p>${r.note}</p><button class="btn primary" onclick="quoteRecord('${encodeURIComponent(r.vehicle)}','${encodeURIComponent(r.size)}')">Ask on WhatsApp</button></article>`).join(''):'<div class="result"><h3>No matching record</h3><p>Send an inquiry and confirm the exact model, year and variant.</p></div>';}
+function openWhatsApp(msg){const number='923000000000';window.open('https://wa.me/'+number+'?text='+encodeURIComponent(msg),'_blank','noopener');}
+function quoteRecord(v,s){openWhatsApp('Assalam-o-alaikum GS Tyres, please quote for Vehicle: '+decodeURIComponent(v)+', tyre size: '+decodeURIComponent(s)+'. Please confirm fitment, brand, price and availability.');}
+function quoteGeneral(){const q=document.getElementById('searchInput').value.trim();openWhatsApp('Assalam-o-alaikum GS Tyres, I need a tyre quote. Vehicle/size: '+(q||'Please advise')+'. Please confirm fitment, price and availability.');}
+document.getElementById('year').textContent=new Date().getFullYear();if('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('./sw.js').catch(()=>{});
+</script></body></html>
